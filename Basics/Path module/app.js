@@ -1,5 +1,5 @@
 
-const path = require("path");
+const path = require('path');
 
 var pathObject = path.parse(__filename);
 
