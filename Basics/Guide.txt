@@ -1,0 +1,3 @@
+
+^4.12.1 -> Any 4.x.x version is ok
+~4.12.1 -> Any 4.12.x version is ok
