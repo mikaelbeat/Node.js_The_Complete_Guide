@@ -46,7 +46,7 @@ app.post('/api/categories', (req, res) => {
 
 app.put('/api/categories/:id', (req, res) => {
     const category = categories.find(c => c.id === parseInt(req.params.id));
-    if (!category) {return res.status(400).send('Category not found.');
+    if (!category) {return res.status(404).send('Category not found.');
     return;
     };
 
@@ -58,6 +58,15 @@ app.put('/api/categories/:id', (req, res) => {
     res.send(category);
 });
 
+
+app.delete('/api/categories/:id', (req, res) => {
+    const category = categories.find(c => c.id === parseInt(req.params.id));
+    if (!category) {return res.status(404).send('Category not found.')};
+
+    const index = categories.indexOf(category);
+    categories.splice(index, 1);
+    res.send(category);
+});
 
 
 
