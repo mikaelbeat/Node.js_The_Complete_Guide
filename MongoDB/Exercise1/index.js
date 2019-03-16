@@ -18,20 +18,30 @@ mongoose.connect('mongodb://localhost/mongo-exercises', {useNewUrlParser: true})
             name: '',
             author: '',
             tags: [],
-            isPublished: true
+            isPublished: true,
+            price: Number
         });
 
         const result = await course.save();
         console.log(result);
     }
 
-    async function getCourses() {
+    async function getCourses1() {
         const courses = await Course
-            .find({tags: 'backend'})
-            .select({name: 1, author: 1})
-            .sort({name: 1});
-
+            .find({isPublished: true, tags: 'backend'})
+            .sort({name: 1})
+            .select({name: 1, author: 1});
         console.log(courses);
     }
 
-    getCourses();
+    //getCourses1();
+
+    async function getCourses2() {
+        const courses = await Course
+            .find({isPublished: true}, tags: {})
+            .sort({price: -1})
+            .select({name: 1, author: 1});
+        console.log(courses);
+    }
+
+    getCourses2();
