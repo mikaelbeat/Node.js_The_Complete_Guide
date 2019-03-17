@@ -5,10 +5,25 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
     .catch(err => console.log('Could not connect to MongoDB...', err));
 
     const courseSchema = new mongoose.Schema({
-        name: String,
+        name: {
+            type: String, 
+            required: true,
+            minlength: 5,
+            maxlength: 255
+        },
+        category: {
+            type: String,
+            required: true,
+            enum: ['web', 'mobile', 'network']
+        },
         author: String,
         tags: [String],
-        date: {type: Date, default: Date.now}
+        date: {type: Date, default: Date.now},
+        isPublished: Boolean,
+        price: {
+            type: Number,
+            required: function() { return this.isPublished; }
+        }
     });
 
     const Course = mongoose.model('Course', courseSchema);
@@ -16,16 +31,23 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
     async function createCourse() {
         const course = new Course({
             name: 'Angular Course',
+            category: 'Horror',
             author: 'Mosh',
             tags: ['angular', 'frontend'],
-            isPublished: true
+            isPublished: true,
+            price: 14
         });
 
-        const result = await course.save();
-        console.log(result);
+        try {
+            const result = await course.save();
+            console.log(result);
+        }
+        catch(ex) {
+            console.log(ex.message);
+        }
     }
 
-        // createCourse();
+    createCourse();
 
     async function getCourses(){
 
@@ -62,6 +84,7 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
     }
 
     // getCourses();
+
 
 
     // HOW TO UPDATE DOCUMENT
