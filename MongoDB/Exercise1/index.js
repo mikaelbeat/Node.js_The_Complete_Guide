@@ -38,9 +38,9 @@ mongoose.connect('mongodb://localhost/mongo-exercises', {useNewUrlParser: true})
 
     async function getCourses2() {
         const courses = await Course
-            .find({isPublished: true}, tags: {})
-            .sort({price: -1})
-            .select({name: 1, author: 1});
+            .find({isPublished: true, tags: {$in: ['frontend', 'backend']}})
+            .sort('-price')
+            .select('name author');
         console.log(courses);
     }
 

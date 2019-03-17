@@ -59,8 +59,63 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
         console.log(courses);
     }
 
-    getCourses();
+    // getCourses();
 
     // createCourse();
+
+
+    // HOW TO UPDATE DOCUMENT
+
+    async function updateCourse(id) {
+        // Approach: QUery first
+        // findById()
+        // Modify its properties
+        // save
+
+        const course = await Course.findById(id);
+        if (!course) return;
+
+        course.isPublished = true;
+        course.author = ' Another Author';
+
+/*         course.set({
+            isPublished: true,
+            author: 'Another Author'
+        }); */
+
+        const result = await course.save();
+        console.log(result);
+    }
+    
+    //updateCourse('5c8b7264108da31b34fbdd5e');
+
+    async function updateCourse2(id) {
+        // Approach: Update first
+        // Uppdate directly
+        // Optionally get the updated document
+
+        // Updates all documents which are not published
+        //const course = await Course.update({isPublished: false});
+
+        const result = await Course.update({_id: id}, {
+            $set: {
+                author: 'Mosh',
+                isPublished: false
+            }
+        });
+        console.log(result);    
+    }
+
+    //updateCourse2('5c8b7264108da31b34fbdd5e');
+
+
+    // DELETE DOCUMENT
+
+    async function deleteCourse(id) {
+        const result = await Course.deleteOne({_id: id});
+        console.log(result);
+    }
+
+    //deleteCourse('5c8b7264108da31b34fbdd5e');
 
     
