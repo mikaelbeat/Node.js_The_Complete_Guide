@@ -17,7 +17,13 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
             enum: ['web', 'mobile', 'network']
         },
         author: String,
-        tags: [String],
+        tags: {type: Array,
+               validate: {
+                   validator: function(v) {
+                       return v && v.length > 0;
+                   },
+                   message: 'A course should have at least one tag.'
+               }},
         date: {type: Date, default: Date.now},
         isPublished: Boolean,
         price: {
@@ -31,9 +37,9 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
     async function createCourse() {
         const course = new Course({
             name: 'Angular Course',
-            category: 'Horror',
+            category: 'Web',
             author: 'Mosh',
-            tags: ['angular', 'frontend'],
+            tags: [],
             isPublished: true,
             price: 14
         });
@@ -43,7 +49,8 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
             console.log(result);
         }
         catch(ex) {
-            console.log(ex.message);
+            for (field in ex.errors)
+                console.log(ex.errors[field]);
         }
     }
 
