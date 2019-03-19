@@ -1,14 +1,42 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('Mongoose');
 
-const genres = [
-  { id: 1, name: 'Action' },  
-  { id: 2, name: 'Horror' },  
-  { id: 3, name: 'Romance' },  
-];
+const genreSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+    required: true
+  },
+  name: {
+    type: String,
+    required: true
+  }
+});
 
-router.get('/', (req, res) => {
-  res.send(genres);
+const Genre = mongoose.model('Genre', genreSchema);
+
+async function createGenre(){
+  const genre = new Genre({
+    id: 1,
+    name: 'Horror'
+  });
+
+  try {
+    const result = await genre.save();
+    console.log(result);
+  }
+  catch(ex) {
+    for (field in ex.errors)
+    console.log(ex.errors[field]);  
+  }
+};
+
+//createGenre();
+
+router.get('/', async (req, res) => {
+    const genres = await Genre.find().sort('name');
+    console.log(genres);
+    res.send(genres);
 });
 
 router.post('/', (req, res) => {

@@ -14,7 +14,10 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
         category: {
             type: String,
             required: true,
-            enum: ['web', 'mobile', 'network']
+            enum: ['web', 'mobile', 'network'],
+            lowercase: true,
+/*             uppercase: true,
+            trim: true */
         },
         author: String,
         tags: {type: Array,
@@ -28,7 +31,12 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
         isPublished: Boolean,
         price: {
             type: Number,
-            required: function() { return this.isPublished; }
+            required: function() { return this.isPublished; },
+            min: 10,
+            max: 200,
+            get: v => Math.round(v),
+            set: v => Math.round(v)
+
         }
     });
 
@@ -36,12 +44,12 @@ mongoose.connect('mongodb://localhost/playground', {useNewUrlParser: true})
 
     async function createCourse() {
         const course = new Course({
-            name: 'Angular Course',
+            name: 'Bootstrap',
             category: 'Web',
             author: 'Mosh',
-            tags: [],
+            tags: ['frontend'],
             isPublished: true,
-            price: 14
+            price: 15.8
         });
 
         try {
